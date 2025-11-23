@@ -1,5 +1,3 @@
-"""DataUpdateCoordinator for our integration."""
-
 from datetime import timedelta
 import logging
 from typing import Any, List
@@ -14,10 +12,7 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, Upda
 from .api import API, APIConnectionError
 from .const import  CONF_ELEMENTS, DEFAULT_COORDINATOR
 
-
-
 _LOGGER = logging.getLogger(__name__)
-
 
 class IntegrationCoordinator(DataUpdateCoordinator[List[dict[str, Any]]]):
 
@@ -119,12 +114,8 @@ class IntegrationCoordinator(DataUpdateCoordinator[List[dict[str, Any]]]):
         return self.all_elements 
         
 
-    # ----------------------------------------------------------------------------
-    # Here we add some custom functions on our data coordinator to be called
-    # from entity platforms to get access to the specific data they want.
-    #
-    # These will be specific to your api or yo may not need them at all
-    # ----------------------------------------------------------------------------
+    # TODO - check if this is needed
+    
     def get_device(self, device_id: int) -> dict[str, Any]: # IS IT USED?
         """Get a device entity from our api data."""
         try:

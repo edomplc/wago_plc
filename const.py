@@ -1,5 +1,3 @@
-"""Constants for our integration."""
-
 DOMAIN = "wago_plc"
 
 DEFAULT_SCAN_INTERVAL = 3

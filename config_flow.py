@@ -34,6 +34,8 @@ from homeassistant.config_entries import (
 import homeassistant.helpers.device_registry as dr
 import homeassistant.helpers.entity_registry as er
 
+# TODO - validate which imports are necessary!
+
 from .api import API, APIAuthError, APIConnectionError
 from .const import DEFAULT_SCAN_INTERVAL, DOMAIN, MIN_SCAN_INTERVAL, CONF_SYM_FILE, CONF_ELEMENTS, DEFAULT_WRITE_DEBOUNCE, CONF_WRITE_DEBOUNCE, CONF_ELEMENTS_ACTION_MODE, CONF_SETTINGS_GROUP_NAME
 from .coordinator import IntegrationCoordinator
@@ -71,66 +73,9 @@ async def validate_host_input(hass: HomeAssistant, data: dict[str, Any]) -> str:
     Data has the keys from STEP_USER_DATA_SCHEMA with values provided by the user.
     """
 
-    return data[CONF_HOST]
+    # NOTE - to do - test the connection to the PLC
 
-
-"""
-async def validate_sym_file_input(hass: HomeAssistant, file_data) -> dict[str, Any]:
-
-    errors: dict[str, str] = {}
-
-    # Process the uploaded file
-
-    if not isinstance(file_data, str):  # Check if str 
-        errors["base"] = "not_a_string"  
-    elif not file_data.strip(): # Check if non-empty
-        errors["base"] = "empty_string"   
-    elif len(file_data.encode('utf-8')) > 2_000_000:  # Limit to 2MB
-        errors["base"] = "file_too_large"
-
-    # Parse XML
-    try:
-        root = ET.fromstring(file_data)
-        # Structural validation
-        if root.tag != "CoDeSysSymbolTable":
-            errors["base"] = "CoDeSysSymbolTable_missing"
-        elif root.find("SymbolVarList") is None:
-            errors["base"] = "SymbolVarList_missing"
-        else:
-            # Optional: Check at least one <Var> with required attributes
-            var_elements = root.findall("SymbolVarList/Var")
-            if not var_elements:
-                errors["base"] = "Var_missing"
-    except ET.ParseError as e:
-        _LOGGER.error(f"XML parsing failed: {e}")
-        errors["base"] = "xml_parser_error"
-
-    return errors
-
-async def handle_sym_file_input(self, file_data) -> str:
-    errors: dict[str, str] = {}
-
-    _LOGGER.debug("Sym_file input: size=%d, first_10=%s", len(file_data), file_data[:10])
-    filename = f"{uuid.uuid4().hex}.xml"
-    temp_dir = self.hass.config.path("custom_components", "wago_plc", "temp")
-    file_path = os.path.join(temp_dir, filename)
-
-    # Create dir if not exists (sync op, so use executor)
-    await self.hass.async_add_executor_job(
-        lambda: os.makedirs(temp_dir, exist_ok=True)
-    )
-
-    # Write the string as UTF-8 bytes to file
-    try:
-        async with aiofiles.open(file_path, "w", encoding="utf-8") as f:  # "w" for text mode
-            await f.write(file_data)
-    except Exception as e:
-        _LOGGER.error(f"Failed to write sym_file: {e}")
-        errors["base"] = "write_failed"
-    else:
-        return file_path
-"""
-    
+    return data[CONF_HOST]   
 
 class ExampleConfigFlow(ConfigFlow, domain=DOMAIN):
     """Handle a config flow for Integration."""
@@ -142,18 +87,13 @@ class ExampleConfigFlow(ConfigFlow, domain=DOMAIN):
     @staticmethod
     @callback
     def async_get_options_flow(config_entry: ConfigEntry) -> OptionsFlow:
-        """Get the options flow for this handler.
 
-        Remove this method and the ExampleOptionsFlowHandler class
-        if you do not want any options for your integration.
-        """
         return OptionsFlowHandler()
 
-    async def async_step_user(
+    async def async_step_user(  # this is the name of the first step even if it does not concern the user :)
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
         """Handle the initial step.
-
         Called when you initiate adding an integration via the UI
         """
 
@@ -165,8 +105,9 @@ class ExampleConfigFlow(ConfigFlow, domain=DOMAIN):
                 host = await validate_host_input(self.hass, user_input)
             except CannotConnect:
                 errors["base"] = "cannot_connect"
-            except InvalidAuth:
-                errors["base"] = "invalid_auth"
+            # so far no authorization check with the PLC in webvisu provided by Codesys V2.3.
+            # except InvalidAuth:
+            #    errors["base"] = "invalid_auth"
             except Exception:  # pylint: disable=broad-except
                 _LOGGER.exception("Unexpected exception")
                 errors["base"] = "unknown"
@@ -187,8 +128,10 @@ class ExampleConfigFlow(ConfigFlow, domain=DOMAIN):
 
                 self._input_data = user_input
 
-                # Call the next step
+                # Finish up
                 return self.async_create_entry(title=self._title, data=self._input_data)
+                
+                # IF there was a 2nd step of the initial config, this would be used
                 #return await self.async_step_sym_file()
 
         # Show initial form.
@@ -219,8 +162,8 @@ class ExampleConfigFlow(ConfigFlow, domain=DOMAIN):
                 await validate_host_input(self.hass, user_input)
             except CannotConnect:
                 errors["base"] = "cannot_connect"
-            except InvalidAuth:
-                errors["base"] = "invalid_auth"
+            #except InvalidAuth:
+            #    errors["base"] = "invalid_auth"
             except Exception:  # pylint: disable=broad-except
                 _LOGGER.exception("Unexpected exception")
                 errors["base"] = "unknown"
@@ -242,17 +185,17 @@ class ExampleConfigFlow(ConfigFlow, domain=DOMAIN):
             errors=errors,
         )
 
+# Options Flow manages setting the options of the integration
+# which are availabe after adding the integration
 
 class OptionsFlowHandler(OptionsFlow):
 
     def __init__(self) -> None:
         """Initialize options flow."""
 
-
     async def async_step_init(self, user_input=None) -> FlowResult:
         # Decide what to show as the Options menu
-        # Also need to be in strings.json and translation files.
-        
+        # Also need to be in strings.json and translation files.      
         # Base options (always shown)
         menu_options = ["refresh", "write_debounce", "sym_file"]
         
@@ -266,9 +209,7 @@ class OptionsFlowHandler(OptionsFlow):
             menu_options=menu_options,
         )
     
-    
     # Function needed for the async_step_elements, checking if addresses provided by the user are in the sym_file
-    
     async def _check_addr_in_xml(
         self,
         addr: str,
@@ -401,7 +342,9 @@ class OptionsFlowHandler(OptionsFlow):
             return new_entity
         else:
             return False
-
+    
+    # OPTION - set the refresh interval = how often to ask the PLC for fresh
+    # data in case of the "live" coordinator
     async def async_step_refresh(self, user_input=None) -> FlowResult:
         """Handle menu refresh flow."""
         if user_input is not None:
@@ -419,6 +362,9 @@ class OptionsFlowHandler(OptionsFlow):
 
         return self.async_show_form(step_id="refresh", data_schema=data_schema)
     
+    # OPTION - set the time of delay between writting data to the PLC and
+    # requesting a reload of values from the PLC. In some cases the old value 
+    # gets returned before the requested new value is written 
     async def async_step_write_debounce(self, user_input=None) -> FlowResult:
         """Handle menu refresh flow."""
         if user_input is not None:
@@ -436,6 +382,9 @@ class OptionsFlowHandler(OptionsFlow):
 
         return self.async_show_form(step_id="refresh", data_schema=data_schema)
     
+    # OPTION - add the symbol XML file copied from the project directory and 
+    # generated by Codesys.  This is the basis of converting variable names to 
+    # specific addressess used for communication with the PLC
     async def async_step_sym_file(self, user_input: dict[str, Any] | None = None) -> FlowResult:
         """Handle the sym_file upload option."""
         errors: dict[str, str] = {}
@@ -498,6 +447,7 @@ class OptionsFlowHandler(OptionsFlow):
                     new_data = {**self.config_entry.options, CONF_SYM_FILE: file_path}
                     self.hass.config_entries.async_update_entry(self.config_entry, options=new_data)
 
+                    # THIS IS USED ONLY WHEN THE SYM FILE IS RELOADED 
                     # Update the addresses of existing devices (if any are configured)
                     current_elements: list[dict] = self.config_entry.options.get(CONF_ELEMENTS, [])
                     
@@ -544,6 +494,7 @@ class OptionsFlowHandler(OptionsFlow):
                     
                     
                     return self.async_create_entry(data=new_data)
+        
         # Show the form on initial load (when user_input is None) - This was missing or indented wrong
         return self.async_show_form(
             step_id="sym_file",
@@ -556,7 +507,9 @@ class OptionsFlowHandler(OptionsFlow):
             ),
             errors=errors,
         )
-                    
+    
+    # OPTION - add the YMAL data to define the devices
+    # can be used as an increment - adding new ones or as a complete rewrite
     async def async_step_elements(self, user_input: dict[str, Any] | None = None) -> FlowResult:
         
         """Handle elements configuration flow."""
@@ -717,6 +670,7 @@ class OptionsFlowHandler(OptionsFlow):
             }
         )
 
+# NOTE - fill it with functions or... remove
 
 class CannotConnect(HomeAssistantError):
     """Error to indicate we cannot connect."""

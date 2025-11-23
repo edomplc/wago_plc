@@ -1,4 +1,4 @@
-"""Sensor setup for our Integration."""
+# Sensor setup 
 
 import logging
 from typing import Any

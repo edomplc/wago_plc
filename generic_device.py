@@ -1,4 +1,4 @@
-"""Base entity for all PLC devices."""
+# Base entity for all PLC devices
 
 import logging
 from typing import Any

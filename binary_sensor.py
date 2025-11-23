@@ -1,4 +1,4 @@
-"""Binary sensor setup for our Integration."""
+# Binary sensor setup
 
 import logging
 from typing import Any

@@ -1,4 +1,4 @@
-"""Cover setup for our Integration."""
+# Cover setup 
 
 import logging
 from typing import Any

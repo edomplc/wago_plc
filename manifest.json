@@ -6,7 +6,7 @@
   ],
   "config_flow": true,
   "dependencies": [],
-  "documentation": "https://github.com/msp1974/HAIntegrationExamples",
+  "documentation": "https://github.com/edomplc/wago_plc",
   "homekit": {},
   "iot_class": "local_polling",
   "requirements": ["aiohttp"],

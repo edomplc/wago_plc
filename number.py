@@ -1,4 +1,4 @@
-"""Number setup for temperature setpoints in WAGO PLC Integration."""
+# Number setup 
 
 import logging
 from typing import Any

@@ -1,7 +1,7 @@
-"""API Placeholder.
+"""WAGO API 
 
-You should create your api seperately and have it hosted on PYPI.  This is included here for the sole purpose
-of making this example code executable.
+Move it to PYPI.  Work in progress
+
 """
 
 import random

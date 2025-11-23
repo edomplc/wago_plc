@@ -1,4 +1,4 @@
-"""Switch setup for our Integration."""
+# Switch setup
 
 import logging
 from typing import Any

@@ -1,4 +1,4 @@
-"""Light setup for our Integration."""
+# Light setup
 
 import logging
 from typing import Any
