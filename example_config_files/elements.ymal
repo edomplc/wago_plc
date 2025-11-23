@@ -1,0 +1,6 @@
+  - device_name: Światło Kuchnia
+    device_id: Light_1L4
+    device_type: ON_OFF_LIGHT
+    u_state_addr: .OUT_L_Kuchnia
+    change_addr: PLC_PRG.Light_Kuchnia.external
+    change_type: value
