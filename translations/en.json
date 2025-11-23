@@ -1,0 +1,89 @@
+{
+  "config": {
+    "title": "Advanced Config Flow Example",
+    "abort": {
+      "already_configured": "Device is already configured",
+      "reconfigure_successful": "Reconfiguration successful",
+      "already_in_progress": "A setup is already in progress for this integration"
+    },
+    "error": {
+      "cannot_connect": "Failed to connect",
+      "invalid_auth": "Invalid authentication",
+      "invalid_settings": "Invalid settings",
+      "unknown": "Unexpected error"
+    },
+    "step": {
+      "user": {
+        "title": "Integration config - HOST",
+        "data": {
+          "host": "Host"
+        }
+      },
+      "reconfigure": {
+        "data": {
+          "host": "Host",
+          "sym_file": "SYM File contents"
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Integration options",
+        "menu_options": {
+          "refresh": "Refresh Interval",
+          "write_debounce": "Refresh delay after sending data to PLC",
+          "sym_file": "SYM File",
+          "elements": "Control Elements"
+        }
+      },
+      "refresh": {
+        "title": "Refresh Interval",
+        "description": "Set interval of data requests to PLC",
+        "data": {
+          "scan_interval": "Scan Interval (seconds)"
+        }
+      },
+      "write_debounce": {
+        "title": "Write Debounce",
+        "description": "Set delay of automatic refresh after sending data to PLC",
+        "data": {
+          "write_debounce": "Refresh delay (seconds)"
+        }
+      },
+      "sym_file": {
+        "title": "Enter contents of SYM File",
+        "description": "Enter contents XML SYM file for the PLC integration",
+        "data": {
+          "sym_file": "SYM File contents"
+        }
+      },
+      "elements": {
+        "title": "Define Elements",
+        "description": "Configure custom elements in YAML",
+        "data": {
+          "elements": "Elements YAML",
+          "overwrite": "Add or Overwrite"
+        }
+      }      
+    },
+    "error": {
+      "invalid_elements": "Invalid element structure (check name, address, type).",
+      "invalid_file": "Invalid file: Must be an XML file.",
+      "empty_string": "File seems to be empty.",
+      "file_too_large": "File too large (max 1MB).",
+      "write_failed": "Failed to store the file.",
+      "invalid_xml_format": "File seems to be wrongly formatted, does not start with <?xml... ?"
+    }
+  },
+  "selector": {
+    "example_selector": {
+      "options": {
+        "all": "All",
+        "light": "Light",
+        "switch": "Switch"
+      }
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "domain": "wago_plc",
+  "name": "WAGO_PLC 750 Codesys 2.3 Integration",
+  "codeowners": [
+    "@edomplc"
+  ],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/msp1974/HAIntegrationExamples",
+  "homekit": {},
+  "iot_class": "local_polling",
+  "requirements": ["aiohttp"],
+  "single_config_entry": true,
+  "ssdp": [],
+  "version": "1.0.3",
+  "zeroconf": [],
+  "icon": "icon.png"
+}
