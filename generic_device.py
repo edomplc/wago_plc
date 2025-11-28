@@ -54,4 +54,4 @@ class PLC_device(CoordinatorEntity):
         if plc_key not in self._device:
             _LOGGER.error("Device %s misconfigured: missing PLC address key '%s'", self._device.get("device_id"), plc_key)
             raise HomeAssistantError(f"Device '{self._device.get('device_id')}' missing PLC address for {plc_key}")
-        await self.coordinator.api.set_data(self.coordinator.session, self.coordinator.host, self._device[plc_key], value)
+        await self.coordinator.api.set_data(self._device[plc_key], value)

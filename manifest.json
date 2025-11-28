@@ -9,7 +9,7 @@
   "documentation": "https://github.com/edomplc/wago_plc",
   "homekit": {},
   "iot_class": "local_polling",
-  "requirements": ["aiohttp"],
+  "requirements": ["aiohttp", "wago-visu-client"],
   "single_config_entry": true,
   "ssdp": [],
   "version": "1.0.3",

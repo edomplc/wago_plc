@@ -9,7 +9,11 @@ from homeassistant.const import CONF_HOST
 from homeassistant.core import DOMAIN, HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
-from .api import API, APIConnectionError
+from wago_visu_client import WagoPLC as API
+from wago_visu_client import ConnectionError as APIConnectionError
+
+#from .api import API, APIConnectionError
+
 from .const import  CONF_ELEMENTS, DEFAULT_COORDINATOR
 
 _LOGGER = logging.getLogger(__name__)
@@ -35,7 +39,7 @@ class IntegrationCoordinator(DataUpdateCoordinator[List[dict[str, Any]]]):
         self.session = session            # Store the async session
         self.poll_interval = update_interval
 
-        self.api = API()        
+        self.api = API(self.host, self.session)        
 
         super().__init__(
             hass,
@@ -91,7 +95,7 @@ class IntegrationCoordinator(DataUpdateCoordinator[List[dict[str, Any]]]):
 
         # Step 2: Call API (fixed to be async with session)
         try:
-            api_data = await self.api.get_data(self.session, self.host, addrs)
+            api_data = await self.api.get_data(addrs)
 
             if len(api_data) != len(addrs):
                 raise UpdateFailed(f"{self.group_name} coordinator - Response length mismatch: expected {len(addrs)}, got {len(api_data)}")
