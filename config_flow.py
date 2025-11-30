@@ -53,20 +53,11 @@ import asyncio
 
 _LOGGER = logging.getLogger(__name__)
 
-# ----------------------------------------------------------------------------
-# Adjust the data schema to the data that you need
-# ----------------------------------------------------------------------------
 STEP_USER_DATA_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_HOST, description={"suggested_value": "192.168.10.3"}): str, 
     }
 )
-
-# ----------------------------------------------------------------------------
-# Example selectors
-# There are lots of selectors available for you to use, described at
-# https://www.home-assistant.io/docs/blueprint/selectors/
-# ----------------------------------------------------------------------------
 
 
 async def validate_host_input(hass: HomeAssistant, data: dict[str, Any]) -> str:

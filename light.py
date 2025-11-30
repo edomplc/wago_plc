@@ -44,6 +44,8 @@ class OnOffLight(PLC_device, LightEntity):
     def __init__(self, coordinator: IntegrationCoordinator, device: dict[str, Any]):
         self._id_suffix = device.get("u_state_addr", "unknown").replace(".", "_")
         self._availability_check = "u_state_value"
+        self._change_type = device.get("change_type", "tap")
+
         super().__init__(coordinator, device)  # Handles name, unique_id, device_info    
 
     @property
@@ -56,11 +58,7 @@ class OnOffLight(PLC_device, LightEntity):
         return bool(int(value))
     
     def _turn(self, target_state: str) -> int:
-        
-        if "change_type" not in self._device:
-            _LOGGER.error(f"Action required for: {self._device["device_id"]} but no 'change_type' given")
-            raise HomeAssistantError(f"'{self._device["device_id"]}' is misconfigured: missing 'change_type'")     
-        
+               
         if self._device["change_type"] == "tap": #send 1 if need to change
             if (self.is_on and target_state == "ON") or (not self.is_on and target_state == "OFF"):
                 return -1

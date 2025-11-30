@@ -1,6 +1,6 @@
 {
   "config": {
-    "title": "Advanced Config Flow Example",
+    "title": "Config Flow",
     "abort": {
       "already_configured": "Device is already configured",
       "reconfigure_successful": "Reconfiguration successful",
@@ -34,8 +34,8 @@
         "menu_options": {
           "refresh": "Refresh Interval",
           "write_debounce": "Refresh delay after sending data to PLC",
-          "sym_file": "SYM File",
-          "elements": "Control Elements"
+          "sym_file": "Symbol File",
+          "elements": "Devices"
         }
       },
       "refresh": {
@@ -53,17 +53,17 @@
         }
       },
       "sym_file": {
-        "title": "Enter contents of SYM File",
-        "description": "Enter contents XML SYM file for the PLC integration",
+        "title": "Symbol File",
+        "description": "Enter contents of XML SYM file",
         "data": {
           "sym_file": "SYM File contents"
         }
       },
       "elements": {
-        "title": "Define Elements",
-        "description": "Configure custom elements in YAML",
+        "title": "Define Devices",
+        "description": "Configure devices in YAML",
         "data": {
-          "elements": "Elements YAML",
+          "elements": "Devices YAML",
           "overwrite": "Add or Overwrite"
         }
       }      
