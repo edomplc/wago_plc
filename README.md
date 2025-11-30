@@ -39,8 +39,8 @@ The basic definition of a light looks as follows:
   - device_name: Kitchen Light  # Name to be displayed in HA
     device_id: Light_1PP1       # Unique id, I use Fb name from Codesys
     device_type: ON_OFF_LIGHT   # This tells the integration it is a light
-    u_state_addr: .OUT29        # Address for using ligt status
-    change_addr: PLC_PRG.LIGHT_1PP1.external  # Address to write to to switch the light
+    u_state_addr: .OUT29        # Variable/address for checking ligt status
+    change_addr: PLC_PRG.LIGHT_1PP1.external  # Variable to write to to switch the light
     change_type: value          # How to swithch the light
 ```
 The last attribute is optional and understands two values: 
@@ -63,26 +63,26 @@ The basic definiotion of a blind looks as follows:
   - device_name: Kitchen Blind 1                  # Name to be displayed in HA
     device_id: Blind_1PP1                         # Unique id, I use Fb name from Codesys
     device_type: BLIND                            # This tells the integration it is a blind
-    u_is_opening_addr: .OUT41                     # Address for chcecking if blind is moving up
-    u_is_closing_addr: .OUT42                     # Address for chcecking if blind is moving down
-    u_position_addr: PLC_PRG.Control_B_1PP1.POS   # Address for checking the current position
-    open_addr: PLC_PRG.VIS_B_1PP1_UP              # Address for initiating upward movement
-    close_addr: PLC_PRG.VIS_B_1PP1_DOWN           # Address for initiating downward movement
-    go_to_pos_addr: PLC_PRG.VIS_B_1PP1_SHADE      # Address for initiating movement to exact position
-    set_pos_addr: PLC_PRG.Input_B_1PP1.PI         # Address for setting the desired position
+    u_is_opening_addr: .OUT41                     # Variable for chcecking if blind is moving up
+    u_is_closing_addr: .OUT42                     # Variable for chcecking if blind is moving down
+    u_position_addr: PLC_PRG.Control_B_1PP1.POS   # Variable for checking the current position
+    open_addr: PLC_PRG.VIS_B_1PP1_UP              # Variable for initiating upward movement
+    close_addr: PLC_PRG.VIS_B_1PP1_DOWN           # Variable for initiating downward movement
+    go_to_pos_addr: PLC_PRG.VIS_B_1PP1_SHADE      # Variable for initiating movement to exact position
+    set_pos_addr: PLC_PRG.Input_B_1PP1.PI         # Variable for setting the desired position
 ```
 In my instalation I use the blind control provided by OSCAT Building libraries.  Your installation might work differently.\
 I am open for requests to adjust this device definition to work with other function blocks
 
 You can extend the definition of a blind by adding configuration entities:
 ```
-    setting_time_up_addr: PLC_PRG.Control_B_1PP1.T_UP            # Address for defining the time of upward movement in sec.
-    setting_time_dn_addr: PLC_PRG.Control_B_1PP1.T_DN            # Address for defining the time of downward movement in sec.
-    setting_time_power_addr: PLC_PRG.Input_B_1PP1.MAX_RUNTIME    # Address for defining the time of powering the blind motor in sec.
-    setting_shade_start_angle_addr: PLC_PRG.Shade_B_1PP1.HORZ1   # Address for defining the sun position to start auto-shade functionality
-    setting_shade_end_angle_addr: PLC_PRG.Shade_B_1PP1.HORZ2     # Address for defining the sun position to end auto-shade functionality
-    setting_shade_position_addr: PLC_PRG.Shade_B_1PP1.shade_pos  # Address for defining the desired blind position when auto-shade activates
-    setting_shade_delay_addr: PLC_PRG.Shade_B_1PP1.shade_delay   # Address for defining the delay to act when auto-shade is activate
+    setting_time_up_addr: PLC_PRG.Control_B_1PP1.T_UP            # Variable for defining the time of upward movement in sec.
+    setting_time_dn_addr: PLC_PRG.Control_B_1PP1.T_DN            # Variable for defining the time of downward movement in sec.
+    setting_time_power_addr: PLC_PRG.Input_B_1PP1.MAX_RUNTIME    # Variable for defining the time of powering the blind motor in sec.
+    setting_shade_start_angle_addr: PLC_PRG.Shade_B_1PP1.HORZ1   # Variable for defining the sun position to start auto-shade functionality
+    setting_shade_end_angle_addr: PLC_PRG.Shade_B_1PP1.HORZ2     # Variable for defining the sun position to end auto-shade functionality
+    setting_shade_position_addr: PLC_PRG.Shade_B_1PP1.shade_pos  # Variable for defining the desired blind position when auto-shade activates
+    setting_shade_delay_addr: PLC_PRG.Shade_B_1PP1.shade_delay   # Variable for defining the delay to act when auto-shade is activate
 ```
 ### Sensor
 
@@ -90,7 +90,7 @@ You can extend the definition of a blind by adding configuration entities:
   - device_name: Light South           # Name to be displayed in HA
     device_id: LIGHT_SOUTH             # Unique id, I use Fb name from Codesys
     device_type: ILLUMINANCE_SENSOR    # This tells the integration what type of sensor it is
-    u_data_addr: SensorReader.L_South  # Address for chcecking sensor reading
+    u_data_addr: SensorReader.L_South  # Variable for chcecking sensor reading
     divisor: 1                         # Optional - divisor of values provided by the PLC
     unit: lux                          # Optional - if left out the default for each sensor type will be assigned
 ```
@@ -103,7 +103,7 @@ Allowed units are: "Lux", "Celcius", "Watt" (NOTE: to be extended)
   - device_name: Target Temperature Kitchen     # Name to be displayed in HA
     device_id: TEMP_SET_1SA                     # Unique id, I use Fb name from Codesys
     device_type: TEMPERATURE_SETTER             # This tells the integration it is a Temeprature Setter
-    u_data_addr: PLC_PRG.TEMP_H1SA              # Address for chcecking/writting the setting
+    u_data_addr: PLC_PRG.TEMP_H1SA              # Variable for chcecking/writting the setting
     mode: box                                   # Optional: Widget type
     unit: celcius                               # Optional: Unit mark to display as sufix
     divisor: 10                                 # Optional - divisor of values provided by / sent to the PLC
